@@ -3,6 +3,7 @@ package mx.edu.itses.drs.MetodosNumericos.services;
 import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
 import mx.edu.itses.drs.MetodosNumericos.domain.Biseccion;
+import mx.edu.itses.drs.MetodosNumericos.domain.PuntoFijo;
 import mx.edu.itses.drs.MetodosNumericos.domain.ReglaFalsa;
 import org.springframework.stereotype.Service;
 
@@ -114,6 +115,36 @@ public class UnidadIIServiceImpl implements UnidadIIService {
             ReglaFalsa renglon = new ReglaFalsa();
             // renglon.setIntervaloInvalido(true);
             respuesta.add(renglon);
+        }
+        return respuesta;
+    }
+    
+    
+    @Override
+    public ArrayList<PuntoFijo> AlgoritmoPuntoFijo(PuntoFijo puntofijo){
+        ArrayList<PuntoFijo> respuesta = new ArrayList<>();
+        double Xi = puntofijo.getXi();
+        double Xn;
+        double Ea = 100;
+        int maxIteraciones = puntofijo.getIteracionesMaximas();
+        
+        for (int i = 1; i <=maxIteraciones; i++) {
+            Xn = Funciones.Ecuacion(puntofijo.getGX(), Xi);
+            Ea = Funciones.ErrorRelativo(Xn, Xi);
+            double gx = Funciones.Ecuacion(puntofijo.getGX(), Xi);
+            
+            PuntoFijo iteracion = new PuntoFijo();
+            iteracion.setXi(Xi);
+            iteracion.setGX(String.valueOf(gx));
+            iteracion.setEa(Ea);
+            iteracion.setIteracionesMaximas(i);
+            
+            respuesta.add(iteracion);
+            
+            if (Ea <= puntofijo.getEa()) {
+                break;
+            }
+            Xi = Xn;
         }
         return respuesta;
     }

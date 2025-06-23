@@ -30,24 +30,27 @@
             </div>
         </nav>
         <div class="container">
-            <div class="row">
-                <img class="img-fluid w-100" th:src="@{/images/metodosnumericos.png}"/>
-            </div>
-        </div> 
-        <div class="container">
-            <h1 class="text">Solución de Ecuaciones Algebráicas</h1>
-            <h3 class="text">Métodos Númericos</h3>
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="/unit2/formbisection">Bisección</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/unit2/formreglafalsa">Regla Falsa</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/unit2/formpuntofijo">Punto Fijo</a>
-                </li>
-            </ul>
+            <h1 class="text">Método de Punto Fijo</h1>
+            <h3>Solución mediante algoritmo de Bisección</h3>
         </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Xi</th>
+                    <th scope="col">G(Xi)</th>
+                    <th scope="col">Error Aprox.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="solve,iter:${solvePuntoFijo}">
+                    <td th:text="${iter.index}"># de Iteración</td>
+                    <td th:text="${solve.Xi}">Valor límite inferior Xi</td>
+                    <td th:text="${solve.GX}">Función evaluada en GX</td>
+                    <td th:text="${solve.Ea}">Error estimado aproximación actual</td>
+                </tr>
+            </tbody>
+        </table>
     </body>
 </html>
