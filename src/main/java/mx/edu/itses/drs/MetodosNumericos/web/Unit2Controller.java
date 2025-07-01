@@ -2,6 +2,7 @@ package mx.edu.itses.drs.MetodosNumericos.web;
 
 import lombok.extern.slf4j.Slf4j;
 import mx.edu.itses.drs.MetodosNumericos.domain.Biseccion;
+import mx.edu.itses.drs.MetodosNumericos.domain.NewtonRaphson;
 import mx.edu.itses.drs.MetodosNumericos.domain.PuntoFijo;
 import mx.edu.itses.drs.MetodosNumericos.domain.ReglaFalsa;
 import mx.edu.itses.drs.MetodosNumericos.services.Funciones;
@@ -15,12 +16,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @Slf4j
 public class Unit2Controller {
+
     @Autowired
     private UnidadIIService bisectionservice;
     @Autowired
     private UnidadIIService reglafalsaservice;
     @Autowired
     private UnidadIIService puntofijoservice;
+    @Autowired
+    private UnidadIIService newtonraphsonservice;
 
     @GetMapping("unit2/formbisection")
     public String formBisection(Model model) {
@@ -39,13 +43,10 @@ public class Unit2Controller {
         var solveBisection = bisectionservice.AlgoritmoBiseccion(bisection);
 
         //log.info("Arreglo: " + solveBisection);
-        
         model.addAttribute("solveBisection", solveBisection);
         return "/unit2/bisection/solvebisection";
     }
-    
-    
-    
+
     @GetMapping("unit2/formreglafalsa")
     public String formReglaFalsa(Model model) {
 
@@ -54,7 +55,7 @@ public class Unit2Controller {
         model.addAttribute("reglafalsa", reglafalsa);
         return "unit2/reglafalsa/formreglafalsa";
     }
-    
+
     @PostMapping("unit2/solvereglafalsa")
     public String solvereglafalsa(ReglaFalsa reglafalsa, Model model) {
 
@@ -63,12 +64,11 @@ public class Unit2Controller {
         var solveReglaFalsa = reglafalsaservice.AlgoritmoReglaFalsa(reglafalsa);
 
         log.info("Arreglo: " + solveReglaFalsa);
-        
+
         model.addAttribute("solveReglaFalsa", solveReglaFalsa);
         return "unit2/reglafalsa/solvereglafalsa";
     }
-    
- 
+
     @GetMapping("unit2/formpuntofijo")
     public String formPuntoFijo(Model model) {
 
@@ -77,7 +77,7 @@ public class Unit2Controller {
         model.addAttribute("puntofijo", puntofijo);
         return "unit2/puntofijo/formpuntofijo";
     }
-    
+
     @PostMapping("unit2/solvepuntofijo")
     public String solvepuntofijo(PuntoFijo puntofijo, Model model) {
 
@@ -86,9 +86,28 @@ public class Unit2Controller {
         var solvePuntoFijo = puntofijoservice.AlgoritmoPuntoFijo(puntofijo);
 
         log.info("Arreglo: " + solvePuntoFijo);
-        
+
         model.addAttribute("solvePuntoFijo", solvePuntoFijo);
         return "unit2/puntofijo/solvepuntofijo";
     }
-    
+
+    @GetMapping("unit2/formnewtonraphson")
+    public String formNewtonRaphson(Model model) {
+
+        NewtonRaphson newtonraphson = new NewtonRaphson();
+
+        model.addAttribute("newtonraphson", newtonraphson);
+
+        return "unit2/newtonraphson/formnewtonraphson";
+    }
+
+    @PostMapping("unit2/solvenewtonraphson")
+    public String solvenewtonraphson(NewtonRaphson newtonraphson, Model model) {
+        var solveNewtonRaphson = newtonraphsonservice.AlgoritmoNewtonRaphson(newtonraphson);
+
+        log.info("Arreglo " + solveNewtonRaphson);
+        model.addAttribute("solveNewtonRaphson", solveNewtonRaphson);
+        return "unit2/newtonraphson/solvenewtonraphson";
+    }
+
 }

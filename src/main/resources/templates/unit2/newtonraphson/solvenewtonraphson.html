@@ -30,25 +30,30 @@
             </div>
         </nav>
         <div class="container">
-            <h1 class="text">Método de Punto Fijo</h1>
-            <h3>Solución mediante algoritmo de Punto Fijo</h3>
+            <h1 class="text">Método de Newton Raphson</h1>
+            <h3>Solución mediante algoritmo de Newton Raphson</h3>
         </div>
 
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">Iteracion</th>
                     <th scope="col">Xi</th>
-                    <th scope="col">G(Xi)</th>
-                    <th scope="col">Error Aprox.</th>
+                    <th scope="col">F(Xi)</th>
+                    <th scope="col">F(DXi)</th>
+                    <th scope="col">Xi+1</th>
+                    <th scope="col">Error estimado</th>
+
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="solve,iter:${solvePuntoFijo}">
-                    <td th:text="${iter.index}"># de Iteración</td>
-                    <td th:text="${solve.Xi}">Valor límite inferior Xi</td>
-                    <td th:text="${solve.GX}">Función evaluada en GX</td>
-                    <td th:text="${solve.Ea}">Error estimado aproximación actual</td>
+                <tr th:each="solve,iter:${solveNewtonRaphson}">
+                    <td th:text="${iter.index}"># de Iteracion</td>
+                    <td th:text="${solve.Xi}">Valor limite inferior Xi</td>
+                    <td th:text="${solve.FXi}">Funcion evaluada en FX</td>
+                    <td th:text="${solve.DFXi}">Derivada de funcion evaluada en FX</td>
+                    <td th:text="${solve.Xi1}">Xi + 1</td>
+                    <td th:text="${solve.Ea}">Error estimado aproximacion actual</td>
                 </tr>
             </tbody>
         </table>
