@@ -19,7 +19,7 @@
         ></script>
     </head>
     <body>
-        <nav class="navbar navbar-light bg-light">
+        <nav class="navbar navbar-expand bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">
                     <img th:src="@{/images/logo.itses.png}"
@@ -27,16 +27,31 @@
                          class="d-inline-block align-top">
                     MÉTODOS NUMERICOS
                 </a>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+                        <a class="nav-link" href="#">Features</a>
+                        <a class="nav-link disabled" href="#">Pricing</a>
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    </div>
+                </div>
             </div>
         </nav>
         <div class="container">
             <div class="row">
                 <img class="img-fluid w-100" th:src="@{/images/metodosnumericos.png}"/>
+
+
             </div>
         </div> 
         <div class="container">
             <h1 class="text">Solución de Ecuaciones Algebráicas</h1>
             <h3 class="text">Métodos Númericos</h3>
+
+            <h4 class="text">Metodos cerrados</h4>
+
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link" href="/unit2/formbisection">Bisección</a>
@@ -44,13 +59,25 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/unit2/formreglafalsa">Regla Falsa</a>
                 </li>
+                
+            </ul>
+
+            <h4 class="text">Metodos abiertos</h4>
+            <ul>
                 <li class="nav-item">
                     <a class="nav-link" href="/unit2/formpuntofijo">Punto Fijo</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/unit2/formnewtonraphson">Newton Raphson</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/unit2/formsecante">Secante</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/unit2/formsecantemodificado">Secante Modificado</a>
+                </li>
             </ul>
+
         </div>
     </body>
 </html>

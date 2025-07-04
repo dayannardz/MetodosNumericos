@@ -6,6 +6,8 @@ import mx.edu.itses.drs.MetodosNumericos.domain.Biseccion;
 import mx.edu.itses.drs.MetodosNumericos.domain.NewtonRaphson;
 import mx.edu.itses.drs.MetodosNumericos.domain.PuntoFijo;
 import mx.edu.itses.drs.MetodosNumericos.domain.ReglaFalsa;
+import mx.edu.itses.drs.MetodosNumericos.domain.Secante;
+import mx.edu.itses.drs.MetodosNumericos.domain.SecanteModificado;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -190,6 +192,110 @@ public class UnidadIIServiceImpl implements UnidadIIService {
         }
 
         return respuesta;
+
+    }
+
+    @Override
+    public ArrayList<Secante> AlgoritmoSecante(Secante secante) {
+        ArrayList<Secante> respuesta = new ArrayList<>();
+
+        double Xi_1 = secante.getXi_1(); 
+        double Xi = secante.getXi();    
+        double Xi1 = 0;     
+        double Ea = 100;                 
+
+        int maxIteraciones = secante.getIteracionesMaximas(); // máximo número de iteraciones
+
+        for (int i = 1; i <= maxIteraciones; i++) {
+            double FXi_1 = Funciones.Ecuacion(secante.getFX(), Xi_1);
+            double FXi = Funciones.Ecuacion(secante.getFX(), Xi);
+
+            double denominador = (FXi - FXi_1);
+            if (denominador == 0) {
+                System.out.println("Denominador cero, deteniendo iteración");
+                break;
+            }
+
+            // Fórmula secante:
+            Xi1 = Xi - (FXi * (Xi - Xi_1)) / denominador;
+
+            // Calcular error relativo aproximado
+            Ea = Funciones.ErrorRelativo(Xi1, Xi);
+
+            // Guardar datos de la iteración
+            Secante iteracion = new Secante();
+            iteracion.setXi_1(Xi_1);
+            iteracion.setXi(Xi);
+            iteracion.setFXi_1(FXi_1);
+            iteracion.setFXi(FXi);
+            iteracion.setXi1(Xi1);
+            iteracion.setEa(Ea);
+            iteracion.setIteracionesMaximas(maxIteraciones);
+
+            respuesta.add(iteracion);
+
+            if (Ea < 0.0001) {  // criterio de convergencia (puedes ajustar)
+                break;
+            }
+
+            // Preparar para la siguiente iteración
+            Xi_1 = Xi;
+            Xi = Xi1;
+        }
+
+        return respuesta;
+    }
+
+    @Override
+    public ArrayList<SecanteModificado> AlgoritmoSecanteModificado(SecanteModificado secantemodificado) {
+    ArrayList<SecanteModificado> respuesta = new ArrayList<>();
+
+    double Xi = secantemodificado.getXi();
+    double Xi1;
+    double Ea = 100;
+    int maxIteraciones = secantemodificado.getIteracionesMaximas();
+    double sigma = secantemodificado.getSigma(); 
+
+    for (int i = 1; i <= maxIteraciones; i++) {
+        double deltaXi = sigma * Xi;
+        double FXi = Funciones.Ecuacion(secantemodificado.getFX(), Xi);
+        double FXiSigma = Funciones.Ecuacion(secantemodificado.getFX(), Xi + deltaXi);
+
+        double denominador = FXiSigma - FXi;
+
+        if (Math.abs(denominador) < 1e-8) {
+            System.out.println("Denominador muy pequeño, deteniendo para evitar división por cero.");
+            break;
+        }
+
+        Xi1 = Xi - (deltaXi * FXi) / denominador;
+
+        // Calcular error relativo
+        if (i != 1) {
+            Ea = Funciones.ErrorRelativo(Xi1, Xi);
+        }
+
+        // Guardar resultados
+        SecanteModificado iter = new SecanteModificado();
+        iter.setXi(Xi);
+        iter.setXi1(Xi1);
+        iter.setFXi(FXi);
+        iter.setFXiSigma(FXiSigma);
+        iter.setEa(Ea);
+        iter.setIteracionesMaximas(i);
+        iter.setFX(secantemodificado.getFX());
+        iter.setSigma(sigma);
+
+        respuesta.add(iter);
+
+        if (Ea <= secantemodificado.getEa()) {
+            break;
+        }
+
+        Xi = Xi1;
+    }
+
+    return respuesta;
 
     }
 
