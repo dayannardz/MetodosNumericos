@@ -5,6 +5,7 @@ import mx.edu.itses.drs.MetodosNumericos.domain.ReglaCramer;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import mx.edu.itses.drs.MetodosNumericos.domain.Gauss;
+import mx.edu.itses.drs.MetodosNumericos.domain.GaussJordan;
 
 @Service
 @Slf4j
@@ -220,6 +221,111 @@ public class UnidadIIIServiceImpl implements UnidadIIIService {
             }
         }
         return M;
+    }
+
+    @Override
+    public GaussJordan AlgoritmoGaussJordan(GaussJordan modelGJ) {
+        if (modelGJ == null) {
+            return null;
+        }
+
+        Integer n = modelGJ.getMN();
+        var Aflat = modelGJ.getMatrizA();
+        var bList = modelGJ.getVectorB();
+
+        GaussJordan out = new GaussJordan();
+        out.setMN(n);
+        out.setSingular(false);
+
+        if (n == null || Aflat == null || bList == null) {
+            out.setSingular(true);
+            return out;
+        }
+        if (n < 2 || n > 4) {
+            out.setSingular(true);
+            return out;
+        }
+        if (Aflat.size() != n * n || bList.size() != n) {
+            out.setSingular(true);
+            return out;
+        }
+
+        double[][] M = new double[n][n + 1];
+        for (int i = 0, p = 0; i < n; i++) {
+            for (int j = 0; j < n; j++, p++) {
+                M[i][j] = Aflat.get(p);
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            M[i][n] = bList.get(i);
+        }
+
+        for (int col = 0; col < n; col++) {
+
+            int piv = col;
+            double maxAbs = Math.abs(M[col][col]);
+            for (int r = col + 1; r < n; r++) {
+                double v = Math.abs(M[r][col]);
+                if (v > maxAbs) {
+                    maxAbs = v;
+                    piv = r;
+                }
+            }
+            if (Math.abs(M[piv][col]) < 1e-12) {
+                out.setSingular(true);
+                out.setMatrizRrefAumentada(flattenAug(M));
+                return out;
+            }
+            if (piv != col) {
+                swapRowsAug(M, piv, col);
+            }
+
+            double diag = M[col][col];
+            for (int j = col; j <= n; j++) {
+                M[col][j] /= diag;
+            }
+
+            for (int r = 0; r < n; r++) {
+                if (r == col) {
+                    continue;
+                }
+                double factor = M[r][col];
+                if (Math.abs(factor) < 1e-15) {
+                    continue;
+                }
+                for (int j = col; j <= n; j++) {
+                    M[r][j] -= factor * M[col][j];
+                }
+            }
+        }
+
+        double[] x = new double[n];
+        for (int i = 0; i < n; i++) {
+            x[i] = M[i][n];
+        }
+
+        out.setVectorX(toList(x));
+        out.setMatrizRrefAumentada(flattenAug(M));
+        out.setMatrizA(new java.util.ArrayList<>(Aflat));
+        out.setVectorB(new java.util.ArrayList<>(bList));
+        return out;
+    }
+
+    private static ArrayList<Double> flattenAug(double[][] M) {
+        int n = M.length, m = M[0].length;
+        var out = new java.util.ArrayList<Double>(n * m);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                out.add(M[i][j]);
+            }
+        }
+        return out;
+    }
+
+    private static void swapRowsAug(double[][] M, int r1, int r2) {
+        double[] tmp = M[r1];
+        M[r1] = M[r2];
+        M[r2] = tmp;
     }
 
     private static ArrayList<Double> flatten(double[][] M) {
