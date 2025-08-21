@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import lombok.extern.slf4j.Slf4j;
 import mx.edu.itses.drs.MetodosNumericos.domain.Gauss;
 import mx.edu.itses.drs.MetodosNumericos.domain.GaussJordan;
+import mx.edu.itses.drs.MetodosNumericos.domain.GaussSeidel;
+import mx.edu.itses.drs.MetodosNumericos.domain.Jacobi;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -73,4 +75,35 @@ public class Unit3Controller {
         return "unit3/gaussjordan/solvegaussjordan";
     }
 
+    @GetMapping("/unit3/formjacobi")
+    public String formJacobi(Model model) {
+        Jacobi modelJacobi = new Jacobi();
+        model.addAttribute("solvejacobi", modelJacobi);
+        return "unit3/jacobi/formjacobi";
+    }
+
+    @PostMapping("/unit3/solvejacobi")
+    public String solveJacobi(Jacobi modelJacobi,
+            Errors errores,
+            Model model) {
+        var solveJacobi = unidadIIIsrv.AlgoritmoJacobi(modelJacobi);
+        model.addAttribute("solveJacobi", solveJacobi);
+        return "unit3/jacobi/solvejacobi";
+    }
+
+    @GetMapping("/unit3/formgaussseidel")
+    public String formSeidel(Model model) {
+        GaussSeidel modelGS = new GaussSeidel();
+        model.addAttribute("modelGS", modelGS);
+        return "unit3/gaussseidel/formgaussseidel";
+    }
+
+    @PostMapping("/unit3/solvegaussseidel")
+    public String solveSeidel(GaussSeidel modelGS,
+            Errors errores,
+            Model model) {
+        var solveGS = unidadIIIsrv.AlgoritmoGaussSeidel(modelGS);
+        model.addAttribute("solveGS", solveGS);
+        return "unit3/gaussseidel/solvegaussseidel";
+    }
 }

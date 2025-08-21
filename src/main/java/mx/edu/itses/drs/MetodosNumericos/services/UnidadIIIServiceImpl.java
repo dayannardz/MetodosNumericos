@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import mx.edu.itses.drs.MetodosNumericos.domain.Gauss;
 import mx.edu.itses.drs.MetodosNumericos.domain.GaussJordan;
+import mx.edu.itses.drs.MetodosNumericos.domain.GaussSeidel;
+import mx.edu.itses.drs.MetodosNumericos.domain.Jacobi;
 
 @Service
 @Slf4j
@@ -351,6 +353,164 @@ public class UnidadIIIServiceImpl implements UnidadIIIService {
         double[] tmp = A[r1];
         A[r1] = A[r2];
         A[r2] = tmp;
+    }
+
+    @Override
+    public Jacobi AlgoritmoJacobi(Jacobi modelJacobi) {
+        Integer n = modelJacobi.getMN();
+        var Aflat = modelJacobi.getMatrizA();
+        var bList = modelJacobi.getVectorB();
+
+        Jacobi out = new Jacobi();
+        out.setMN(n);
+        out.setMatrizA(Aflat);
+        out.setVectorB(bList);
+
+        // validaciones
+        if (n == null || Aflat == null || bList == null) {
+            out.setConvergente(false);
+            return out;
+        }
+
+        double[][] A = new double[n][n];
+        double[] b = new double[n];
+        for (int i = 0, p = 0; i < n; i++) {
+            for (int j = 0; j < n; j++, p++) {
+                A[i][j] = Aflat.get(p);
+            }
+            b[i] = bList.get(i);
+        }
+
+        // parámetros de iteración
+        int maxIter = modelJacobi.getIteraciones() > 0 ? modelJacobi.getIteraciones() : 50;
+        double tol = modelJacobi.getTolerancia() > 0 ? modelJacobi.getTolerancia() : 1e-6;
+
+        double[] xOld = new double[n]; // inicial en 0
+        double[] xNew = new double[n];
+
+        boolean convergio = false;
+        for (int k = 0; k < maxIter; k++) {
+            for (int i = 0; i < n; i++) {
+                double suma = 0.0;
+                for (int j = 0; j < n; j++) {
+                    if (i != j) {
+                        suma += A[i][j] * xOld[j];
+                    }
+                }
+                xNew[i] = (b[i] - suma) / A[i][i];
+            }
+
+            // calcular error
+            double error = 0.0;
+            for (int i = 0; i < n; i++) {
+                error = Math.max(error, Math.abs(xNew[i] - xOld[i]));
+                xOld[i] = xNew[i];
+            }
+
+            if (error < tol) {
+                convergio = true;
+                out.setIteraciones(k + 1);
+                break;
+            }
+        }
+
+        out.setVectorX(toList(xNew));
+        out.setTolerancia(tol);
+        out.setConvergente(convergio);
+        return out;
+    }
+
+    @Override
+    public GaussSeidel AlgoritmoGaussSeidel(GaussSeidel modelGS) {
+        var out = new GaussSeidel();
+        if (modelGS == null) {
+            return out;
+        }
+
+        Integer n = modelGS.getMN();
+        var Aflat = modelGS.getMatrizA();
+        var bList = modelGS.getVectorB();
+
+        int maxIter = (modelGS.getIteraciones() != null && modelGS.getIteraciones() > 0) ? modelGS.getIteraciones() : 50;
+        double tol = (modelGS.getTolerancia() != null && modelGS.getTolerancia() > 0.0) ? modelGS.getTolerancia() : 1e-6;
+
+        out.setMN(n);
+        out.setIteraciones(0);
+        out.setTolerancia(tol);
+        out.setConvergente(false);
+
+        if (n == null || Aflat == null || bList == null) {
+            return out;
+        }
+        if (n < 2 || n > 4) {
+            return out;
+        }
+        if (Aflat.size() != n * n || bList.size() != n) {
+            return out;
+        }
+
+        double[][] A = new double[n][n];
+        double[] b = new double[n];
+        for (int i = 0, p = 0; i < n; i++) {
+            for (int j = 0; j < n; j++, p++) {
+                A[i][j] = Aflat.get(p);
+            }
+            b[i] = bList.get(i);
+            if (Math.abs(A[i][i]) < 1e-12) {
+                return out;
+            }
+        }
+
+        double[] x = new double[n];
+
+        boolean ok = false;
+        for (int k = 0; k < maxIter; k++) {
+            double maxRelErr = 0.0;
+
+            for (int i = 0; i < n; i++) {
+                double suma = 0.0;
+                for (int j = 0; j < n; j++) {
+                    if (j == i) {
+                        continue;
+                    }
+                    suma += A[i][j] * x[j];
+                }
+                double nuevo = (b[i] - suma) / A[i][i];
+
+                double denom = Math.abs(nuevo) < 1e-12 ? 1.0 : Math.abs(nuevo);
+                double rel = Math.abs(nuevo - x[i]) / denom;
+                if (rel > maxRelErr) {
+                    maxRelErr = rel;
+                }
+
+                x[i] = nuevo;
+            }
+
+            if (maxRelErr < tol) {
+                ok = true;
+                out.setIteraciones(k + 1);
+                break;
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            x[i] = pretty(x[i]);
+        }
+
+        out.setVectorX(toList(x));
+        out.setConvergente(ok);
+        return out;
+    }
+
+    private static double pretty(double v) {
+        if (Math.abs(v) < 1e-12) {
+            return 0.0;
+        }
+        double r = Math.rint(v);
+        if (Math.abs(v - r) < 1e-9) {
+            return r;
+        }
+        return Math.round(v * 1e6) / 1e6;
     }
 
 }

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Método de Jacobi</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<script th:inline="javascript">
+function crearMatriz() {
+  const MN = parseInt(document.getElementById('MN').value || "0");
+  if (![2,3,4].includes(MN)) { alert("El tamaño debe ser 2, 3 o 4"); return; }
+
+  const containerA = document.getElementById('MatrixContainer');
+  const containerB = document.getElementById('IndependentContainer');
+  containerA.replaceChildren(); containerB.replaceChildren();
+
+  for (let j = 1; j <= MN; j++) {
+    let rowA = document.createElement('div');
+    rowA.className = "row g-2 mb-2";
+    containerA.appendChild(rowA);
+
+    for (let i = 1; i <= MN; i++) {
+      let colA = document.createElement('div'); colA.className = "col";
+      rowA.appendChild(colA);
+      let coef = document.createElement('input');
+      coef.type = 'number'; coef.step = 'any';
+      coef.name = 'matrizA[]';
+      coef.placeholder = 'a' + j + i;
+      coef.className = "form-control";
+      colA.appendChild(coef);
+    }
+
+    let rowB = document.createElement('div');
+    rowB.className = "row g-2 mb-2"; containerB.appendChild(rowB);
+    let colB = document.createElement('div'); colB.className = "col"; rowB.appendChild(colB);
+    let vb = document.createElement('input');
+    vb.type = 'number'; vb.step = 'any';
+    vb.name = 'vectorB[]';
+    vb.placeholder = 'b' + j;
+    vb.className = "form-control";
+    colB.appendChild(vb);
+  }
+
+  document.getElementById('resolver').style.display = 'block';
+}
+</script>
+
+<body>
+<div class="container py-3">
+  <nav th:replace="/layout/template :: menu"></nav>
+  <div th:replace="/layout/template :: bannerunit3"></div>
+
+  <nav aria-label="breadcrumb" class="mt-2">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
+      <li class="breadcrumb-item"><a th:href="@{/unit3}">Sistemas Lineales</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Formulario Jacobi</li>
+    </ol>
+  </nav>
+
+  <form class="row g-3" th:action="@{/unit3/solvejacobi}" method="post" th:object="${modelJacobi}">
+    <div class="col-12">
+      <h1>Método de Jacobi</h1>
+      <p class="text-muted">Ingresa n, iteraciones, tolerancia y genera la matriz.</p>
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label" for="MN">Dimensión (n)</label>
+      <input type="number" min="2" max="4" class="form-control" id="MN" name="MN">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label" for="iteraciones">Iteraciones máximas</label>
+      <input type="number" class="form-control" id="iteraciones" name="iteraciones">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label" for="tolerancia">Tolerancia</label>
+      <input type="number" step="any" class="form-control" id="tolerancia" name="tolerancia">
+    </div>
+
+    <div class="col-12">
+      <button type="button" class="btn btn-secondary" onclick="crearMatriz()">Crear Matriz</button>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-md-8">
+        <h5>Matriz A</h5>
+        <div id="MatrixContainer"></div>
+      </div>
+      <div class="col-md-4">
+        <h5>Vector b</h5>
+        <div id="IndependentContainer"></div>
+      </div>
+    </div>
+
+    <div id="resolver" class="col-12 mt-3" style="display:none;">
+      <button type="submit" class="btn btn-primary">Resolver</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>
