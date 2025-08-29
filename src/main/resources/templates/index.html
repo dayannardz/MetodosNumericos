@@ -1,67 +1,66 @@
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
+<head>
+    <title>MÉTODOS NUMÉRICOS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        crossorigin="anonymous"
+    >
+    <!-- Bootstrap JS -->
+    <script 
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"
+    ></script>
 
-        <title>METODOS NUMERICOS</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Bootstrap CSS -->
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity=""
-            crossorigin="anonymous"
-            >
-        <!-- Bootstrap JS and dependencies -->
-        <script 
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="" 
-            crossorigin="anonymous"
-        ></script>
-    </head>
-    <body>
-        <nav th:replace="/layout/template :: menu"></nav> 
-        <div class="container">
-            <div class="row">
-                <img class="img-fluid w-100" th:src="@{/images/metodosnumericos.png}"/>
-            </div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/">Inicio</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Solucion Ecuaciones</li>
-                </ol>
-            </nav>
-        </div>
+    <style>
+        body {
+            text-align: justify; /* Justifica todo el texto */
+        }
+        h1, h4, h5 {
+            text-align: left; /* Títulos alineados a la izquierda */
+        }
         
-        <div class="container">
-            <h1 class="text">Solucion de Ecuaciones Algebraicas</h1>
-            <h3 class="text">Metodos Numericos</h3>
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="/unit2/formbisection">Biseccion</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/unit2/formreglafalsa">Regla falsa</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/unit2/formpuntofijo">Punto Fijo</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/unit2/formnewtonraphson">Newton Raphson</a>
-                </li> 
-                <li class="nav-item">
-                    <a class="nav-link" href="/unit2/formsecante">Secante</a>
-                </li> 
-                <li class="nav-item">
-                    <a class="nav-link" href="/unit2/formsecantemodificado">Secante Modificado</a>
-                </li> 
-            </ul>
+    </style>
+</head>
+<body>
+    <nav th:replace="/layout/template :: menu"></nav> 
+    <div class="container">
+        <div class="row">
+            <img class="img-fluid w-100" th:src="@{/images/metodosnumericos.png}" alt="Métodos Numéricos"/>
         </div>
-
-
-
-
-
-    </body>
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Métodos Numéricos</li>
+            </ol>
+        </nav>
+    </div>
+    
+    <div class="container my-4">
+        <h1 class="mb-4 fw-bold">Métodos Numéricos</h1>
+        <p class="lead">
+            Los métodos numéricos constituyen un conjunto de procedimientos y 
+            algoritmos diseñados para obtener soluciones aproximadas a diversos 
+            problemas matemáticos que, en muchos casos, no pueden resolverse exactamente 
+            con técnicas analíticas.
+        </p>
+        <p class="lead">
+            Esta rama del conocimiento es de gran importancia en campos como la 
+            ingeniería, las ciencias aplicadas, la economía y la informática, 
+            pues proporciona herramientas útiles para tratar con ecuaciones no lineales, 
+            sistemas de ecuaciones, problemas de interpolación, así como procesos de integración 
+            y derivación de manera numérica, entre otros.
+        </p>
+        <p class="lead">
+            Su propósito esencial es convertir un problema matemático en una serie de operaciones 
+            que puedan ejecutarse de forma sistemática en un computador, garantizando un equilibrio
+            adecuado entre exactitud y eficiencia. Así, los métodos numéricos actúan como un enlace
+            entre la teoría matemática y su aplicación práctica mediante el uso de la computación.
+        </p>
+    </div>
+</body>
 </html>

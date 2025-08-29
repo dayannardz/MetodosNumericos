@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Métodos Numéricos</title>
+
+        <!-- Bootstrap CSS -->
+        <link 
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            crossorigin="anonymous"
+            >
+        <!-- Bootstrap JS and dependencies -->
+        <script 
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"
+        ></script>
+        
+        <style>
+            p {
+                text-align: justify;
+            }
+        </style>
+    </head>
+    <body>
+            <nav th:replace="~{/layout/template :: menu}"> </nav>
+            <div th:replace="~{/layout/template :: bannerunit4}"></div>
+            <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Ajuste de curvas</li>
+                </ol>
+            </nav>
+            <div class="container">
+                <h1 class="text">Ajuste de Curvas e Interpolación</h1>
+
+                <p class="lead">
+                    El ajuste de curvas y la interpolación son procedimientos clave en los métodos
+                    numéricos que permiten estimar funciones desconocidas a partir de un conjunto de datos conocidos.
+                    Estas técnicas son ampliamente utilizadas en ingeniería, ciencias aplicadas y economía, ya que facilitan 
+                    la predicción de comportamientos, la estimación de valores intermedios y la modelación de fenómenos 
+                    reales cuando no se dispone de una expresión analítica exacta. En esta unidad se estudiarán los métodos 
+                    clásicos de interpolación polinómica, con especial atención al polinomio de Newton mediante diferencias 
+                    divididas y al polinomio de Lagrange. Ambos métodos permiten construir una función que pasa por todos los 
+                    puntos dados y calcular aproximaciones intermedias con un nivel de precisión determinado.
+                </p>
+                <br>
+                <br>
+                <h2 class="mt-4">Métodos de Interpolación</h2>
+                <ul class="list-unstyled">
+                    <li><a href="/unit4/formddnewton" class="text-decoration-none">Diferencias divididas de newton</a></li>
+                    <li><a href="/unit4/formlagrange" class="text-decoration-none">Interpolacion de Lagrange</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>
